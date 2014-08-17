@@ -3,7 +3,9 @@ package com.leancuke.android.hellonfc;
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 public class MyActivity extends Activity {
 
     public static final String EXTRA_MESSAGE = "com.leancuke.android.hellonfc.MESSAGE";
+    public static final String MIME_TEXT_PLAIN = "text/plain";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +29,7 @@ public class MyActivity extends Activity {
         TextView nfcStatusTextView = (TextView) findViewById(R.id.nfcStatusTextView);
 
         if (mNfcAdapter == null) {
-            // Stop here, we definitely need NFC
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "This device doesn't have NFC.", Toast.LENGTH_LONG).show();
             finish();
             return;
 
@@ -39,7 +41,19 @@ public class MyActivity extends Activity {
     }
 
     private void handleIntent(Intent intent) {
-        // TODO: handle Intent
+        String action = intent.getAction();
+
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+
+            String ndefType = intent.getType();
+
+            if (MIME_TEXT_PLAIN.equals(ndefType)) {
+
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+                Log.d(EXTRA_MESSAGE, "Tag Id" + tag.getId());
+                Log.d(EXTRA_MESSAGE, "Description of the tag" + tag.toString());
+            }
+        }
     }
 
     public void checkNfcStatus(View view) {

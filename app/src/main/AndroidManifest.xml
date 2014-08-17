@@ -24,7 +24,11 @@
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
+                <data android:scheme="https" android:host="plus.google.com" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.iosched2014.session" />
+
             </intent-filter>
+
         </activity>
     </application>
 
